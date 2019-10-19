@@ -1,18 +1,26 @@
 
+//PROBLEM STATEMENT: COUNT UNIVAL TREES
 
-function TreeNode(v) {
-    this.val = v
-    this.left = null
-    this.right = null
-  }
-  
-  //      0
+//Complexity analysis (Worst case) - Time: O(N), Space: O(N) - call stack memory for a depth of N
+
+
+ //       0
   //    1   0
   //      1   0      
   //    1   1
   //
   //
-  
+
+// Answer for above: 5 (4 leaf nodes + 1 unival subtree (1,1,1))
+
+
+function TreeNode(v) {
+  this.val = v
+  this.left = null
+  this.right = null
+}
+
+const constructTree = () => {
   let root = new TreeNode(0)
   let a = new TreeNode(1)
   let b = new TreeNode(0)
@@ -27,20 +35,25 @@ function TreeNode(v) {
   b.right = d
   c.left = e
   c.right = f
+  return root
+}
+
+const countUnival = root => {
+  // Base case
+  if (root === null) return [0, true]
   
-  function countUnival(root) {
-   if (root === null) return [0, true]
-   
-   let left = countUnival(root.left)
-   let right = countUnival(root.right)
-    if (left[1] && right[1]) {
-        if ((root.left && root.val !== root.left.val) ||
-         (root.right && root.val !== root.right.val)) {
-          return [left[0]+right[0], false]
-      }
-      else return [left[0]+right[0]+1, true]
+  // Recursive case
+  let left = countUnival(root.left)
+  let right = countUnival(root.right)
+  if (left[1] && right[1]) {
+      if ((root.left && root.val !== root.left.val) ||
+        (root.right && root.val !== root.right.val)) {
+        return [left[0]+right[0], false]
     }
-    return [left[0]+right[0], false]
+    else return [left[0]+right[0]+1, true]
   }
-  
-  console.log(countUnival(root))
+  return [left[0]+right[0], false]
+}
+
+const root = constructTree()
+console.log(countUnival(root))
